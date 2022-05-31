@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   db:
     image: mariadb:10.3
@@ -19,18 +20,26 @@ services:
     depends_on:
       - db
     environment:
-      APP_FULL_BASE_URL: https://192.168.0.121
+      APP_FULL_BASE_URL: https://passbolt.trusc-dev.net
       DATASOURCES_DEFAULT_HOST: "db"
       DATASOURCES_DEFAULT_USERNAME: "passbolt"
       DATASOURCES_DEFAULT_PASSWORD: "P4ssb0lt"
       DATASOURCES_DEFAULT_DATABASE: "passbolt"
+      EMAIL_DEFAULT_FROM: "systems@trusc.net"
+      EMAIL_TRANSPORT_DEFAULT_HOST: "dedi974.jnb1.host-h.net"
+      EMAIL_TRANSPORT_DEFAULT_PORT: "587"
+      EMAIL_TRANSPORT_DEFAULT_USERNAME: "systems@trusc.net"
+      EMAIL_TRANSPORT_DEFAULT_PASSWORD: "mwJrNGSrRW83jc7v"
+      EMAIL_TRANSPORT_DEFAULT_TLS: "true"
+      PASSBOLT_KEY_EMAIL: "systems@trusc.net"
+
     volumes:
-      - ./gpg_volume:/etc/passbolt/gpg
-      - ./jwt_volume:/etc/passbolt/jwt
+      - gpg_volume:/etc/passbolt/gpg
+      - jwt_volume:/etc/passbolt/jwt
     command: ["/usr/bin/wait-for.sh", "-t", "0", "db:3306", "--", "/docker-entrypoint.sh"]
     ports:
       - 9000:80
-      - 443:443
+      - 9443:443
     #Alternatively for non-root images:
     # - 80:8080
     # - 443:4433
